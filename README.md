@@ -14,21 +14,24 @@ https://github.com/ReFirmLabs/binwalk/blob/master/INSTALL.md
 
 This repo is automatically built by Docker Hub.
 
-https://hub.docker.com/repository/docker/sheabot/binwalk
+https://hub.docker.com/repository/docker/cow0o0/binwalk
 
-
+## Modify
+```
+Add ASA/PKG/CSP magic support
+```
 ## Run
 
-These commands mount the current working directory as a volume into the container at `/workspace` which is the $WORKDIR in the container. This allows binwalk to operate on files in the current directory.
+These commands mount the current working directory as a volume into the container at `/iot` which is the $WORKDIR in the container. This allows binwalk to operate on files in the current directory.
 
 ```
-docker run -it --rm -v "$(pwd):/workspace" -w /workspace sheabot/binwalk arg1 arg2 ...
+docker run -it --rm -v "$(pwd):/iot" -w /iot sheabot/binwalk arg1 arg2 ...
 ```
 
 Example:
 
 ```
-docker run -it --rm -v "$(pwd):/workspace" -w /workspace sheabot/binwalk -e firmware.bin
+docker run -it --rm -v "$(pwd):/iot" -w /iot sheabot/binwalk -e firmware.bin
 ```
 
 
