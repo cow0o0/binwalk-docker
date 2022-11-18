@@ -25,13 +25,13 @@ Add ASA/PKG/CSP magic support
 These commands mount the current working directory as a volume into the container at `/iot` which is the $WORKDIR in the container. This allows binwalk to operate on files in the current directory.
 
 ```
-docker run -it --rm -v "$(pwd):/iot" -w /iot sheabot/binwalk arg1 arg2 ...
+docker run -it --rm -v "$(pwd):/iot" -w /iot cow0o0/binwalk:2.3.3 arg1 arg2 ...
 ```
 
 Example:
 
 ```
-docker run -it --rm -v "$(pwd):/iot" -w /iot sheabot/binwalk -e firmware.bin
+docker run -it --rm -v "$(pwd):/iot" -w /iot cow0o0/binwalk:2.3.3 -e firmware.bin
 ```
 
 
