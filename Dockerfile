@@ -8,12 +8,11 @@ RUN echo "dash dash/sh boolean false" | debconf-set-selections && dpkg-reconfigu
 # https://github.com/ReFirmLabs/binwalk/blob/master/INSTALL.md
 RUN apt-get update && apt-get install -y --no-install-recommends \
     arj \
-    binwalk \
     build-essential \
     bzip2 \
     cabextract \
     cramfsswap \
-    default-jdk \
+    # default-jdk \
     git-core \
     gzip \
     lhasa \
@@ -27,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-lzo \
     python3-pip \
+    python3-crypto \
     sleuthkit \
     squashfs-tools \
     srecord \
@@ -35,6 +35,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zlib1g-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Install binwalk from github
+Run git clone https://github.com/ReFirmLabs/binwalk.git /tmp/binwalk && \
+    cd /tmp/binwalk && \
+    python3 setup.py install && \
+    cd / && \
+    rm -rf /tmp/binwalk
 
 # Install sasquatch to extract non-standard SquashFS images
 RUN git clone https://github.com/devttys0/sasquatch /tmp/sasquatch && \
@@ -68,14 +75,20 @@ RUN git clone https://github.com/devttys0/yaffshiv /tmp/yaffshiv && \
 # Install unstuff (closed source) to extract StuffIt archive files
 RUN mkdir -p /tmp/unstuff && \
     cd /tmp/unstuff && \
-    wget -O - https://downloads.tuxfamily.org/sdtraces/stuffit520.611linux-i386.tar.gz | tar -zxv && \
+    wget -O - http://mirror.sobukus.de/files/grimoire/z-archive/stuffit520.611linux-i386.tar.gz | tar -zxv && \
     install -m 0755 bin/unstuff /usr/local/bin/ && \
     rm -rf /tmp/unstuff
 
+# Add ASA/PKG/CSP magic support
+RUN git clone https://github.com/nezlooy/cisco-binwalk /tmp/cisco-binwalk && \
+    cd /tmp/cisco-binwalk && \
+    cp /tmp/cisco-binwalk/magic/* $(pip show binwalk | grep Location | awk -F ' '  '{print $2}')/binwalk/magic/ && \
+    cp /tmp/cisco-binwalk/plugins/* $(pip show binwalk | grep Location | awk -F ' '  '{print $2}')/binwalk/plugins/
+
 # Workspace volume from host
-VOLUME [ "/workspace" ]
-WORKDIR /workspace
+VOLUME [ "/iot" ]
+WORKDIR /iot
 
 # Call binwalk executable with arguments
-ENTRYPOINT [ "binwalk" ]
+ENTRYPOINT [ "binwalk", "--run-as=root" ]
 CMD [ "-h" ]
