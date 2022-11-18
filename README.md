@@ -14,7 +14,7 @@ https://github.com/ReFirmLabs/binwalk/blob/master/INSTALL.md
 
 This repo is automatically built by Docker Hub.
 
-https://hub.docker.com/repository/docker/cow0o0/binwalk
+https://hub.docker.com/r/cow0o0/binwalk
 
 ## Modify
 ```
